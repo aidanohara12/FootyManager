@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./mainPage.css">
+    <title>FootyManager</title>
+</head>
+<body>
+    <div id="header">
+       <img src="footymanagerlogo3.png" id="logo">
+    </div>
+
+    <br>
+
+    <div id="teams">
+        <h4>Choose a Team Below</h4>
+        
+        <input type="radio" name="team_choice" value="Liverpool" checked>Liverpool</input>
+        <input type="radio" name="team_choice" value="Manchester United" >Manchester United</input>
+        <input type="radio" name="team_choice" value="Barcalona" >Barcalona</input>
+        <input type="radio" name="team_choice" value="Real Madrid" >Real Madrid</input>
+        <input type="radio" name="team_choice" value="Arsenal" >Arsenal</input>   
+        <input type="radio" name="team_choice" value="Bayern" >Bayern</input>
+        <input type="radio" name="team_choice" value="PSG" >PSG</input> 
+        <input type="radio" name="team_choice" value="Inter Milan" >Inter Milan</input> 
+        <input type="radio" name="team_choice" value="Tottenham" >Tottenham</input> 
+        <input type="radio" name="team_choice" value="Inter Miami" >Inter Miami</input> 
+        <input type="radio" name="team_choice" value="AC Milan" >AC Milan</input> 
+        <input type="radio" name="team_choice" value="Manchester City" >Manchester City</input> 
+        <input type="radio" name="team_choice" value="Aston Villa" >Aston Villa</input> 
+        <input type="radio" name="team_choice" value="Athletico Madrid" >Athletico Madrid</input> 
+        <input type="radio" name="team_choice" value="Chelsea" >Chelsea</input> 
+        <input type="radio" name="team_choice" value="Dortmund" >Dortmund</input> 
+        <input type="radio" name="team_choice" value="Juventus" >Juventus</input> 
+        <input type="radio" name="team_choice" value="Roma" >Roma</input> 
+        <input type="radio" name="team_choice" value="Napoli" >Napoli</input> 
+        <input type="radio" name="team_choice" value="Porto" >Porto</input> 
+    </div>
+
+    <div id="name">
+        <h4>Enter Coach Name</h4>
+        <input type="text" id="coachName">
+
+        <h6>Click the button below to see your team and start simulating!</h6>
+    </div>
+        <button id="submitButton">See Team!</button>
+
+    <div>
+        <div id="curTeams">
+            <h2>Current Teams</h2>
+
+            <ul id="usrTeam"></ul>
+    
+            <ul id="currentTeam"></ul>
+        </div>
+    
+    
+        <div id="results_tab">
+            <h2>Results</h2>
+
+            <h4 id="weekGames"></h4>
+            <ul id="allGames"></ul>
+            <button id="simulate">Simulate</button>
+            <ul id="results"></ul>
+            
+
+            <div id="greatSeason">
+                <h4>Congrats on a Great Season!</h4>
+                <h6>Below resign or sign new players to your team!</h6>
+                    <h6>Please Choose 1 GK | 2 DEF | 2 MID | 1 FW</h6>
+                <div id="players-container">
+                </div>
+                <button id="choosePlayers">Continue to Next Season!</button>
+            </div>
+            
+
+        </div>
+
+        <div id ="pastChampions">
+            <h2 id="season"></h3>
+            <h4 id="">🏆Past Champions🏆</h4>
+            <ul id="past"></ul>
+        </div>
+    </div>
+    
+
+    <script src="footyManager.js"></script>
+</body>
+</html>
