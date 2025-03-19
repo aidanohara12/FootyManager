@@ -390,7 +390,7 @@ function calculateOverall(curTeam) {
         overall85 = true;
     } 
     if(team.teamName == curTeam.teamName && curTeam.teamOverall >= 88) {
-        overall85 = true;
+        overall88 = true;
     } 
 }
 
