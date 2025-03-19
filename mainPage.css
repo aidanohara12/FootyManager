@@ -29,8 +29,21 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     display: inline-block;
     text-align: left;
-    width: 65%;
-    column-count: 1;
+    width: 100%; /* Use full width */
+    max-width: 700px; /* Increase the max-width */
+}
+
+#teams label {
+    display: block; /* Each label on a new line */
+    font-size: 16px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+#teams input[type="radio"] {
+    margin-right: 8px;
+    transform: scale(1.2);
 }
 
 button {
