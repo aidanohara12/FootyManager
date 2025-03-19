@@ -30,15 +30,15 @@ body {
     display: inline-block;
     text-align: left;
     width: 100%; /* Use full width */
-    max-width: 700px; /* Increase the max-width */
+    max-width: 790px; /* Increase the max-width */
 }
 
 #teams label {
     display: block; /* Each label on a new line */
-    font-size: 16px;
+    font-size: 25px;
     margin-bottom: 5px;
     cursor: pointer;
-    white-space: nowrap; /* Prevents text from wrapping */
+    /* white-space: nowrap; Prevents text from wrapping */
 }
 
 #teams input[type="radio"] {
@@ -150,4 +150,5 @@ button:hover {
     list-style: none;
     margin-left: -40px;
 }
+
 
