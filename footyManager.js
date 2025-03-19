@@ -176,6 +176,9 @@ async function otherTeamSwap() {
 
 async function swapPlayers() {
     let swapPlayers = getSelectedPlayers();
+    if (swapPlayers.length === 0) {
+        return; 
+    }
     console.log(swapPlayers);
 
     team.players = swapPlayers;
@@ -330,6 +333,11 @@ async function swapPlayers() {
 function getSelectedPlayers() {
     const selectedPlayers = [];
     const checkboxes = document.querySelectorAll('input[name="player_choice"]:checked');
+
+    if (checkboxes.length !== 6) {
+        alert("Please choose 6 players! (1 GK | 2 DEF | 2 MID | 1 FW)");
+        return [];
+    }
 
     checkboxes.forEach((checkbox) => {
         const parsedData = checkbox.value.split('/');
