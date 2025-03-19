@@ -14,6 +14,23 @@ const positionOrder = {
     'MID': 3,
     'FW': 4
 };
+let overall85 = false;
+let overall88 = false;
+
+const allAchievments = [
+    "1. Play your first season!",
+    "2. Play 5 Seasons",
+    "3. Win your First Trophy!",
+    "4.Play 10 Seasons",
+    "5. Play 20 Seasons",
+    "6. Win 5 Trophies!",
+    "7. Play 50 Seasoons!",
+    "8. Win 10 Trophies",
+    "9. Create an 85 Overall Team",
+    "10. Create an 88 Overall Team",
+    "11. Win 20 Trophies!",
+    "12. Play 100 Seasons"
+];
 
 async function setup() {
     createDOM();
@@ -45,6 +62,7 @@ function createDOM() {
     allGames_ul = document.getElementById("allGames");
     past_ul = document.getElementById("past");
     results_div = document.getElementById("results_tab");
+    achievment_ul = document.getElementById("achievments");
 
 }
 
@@ -169,6 +187,136 @@ async function swapPlayers() {
     pastChamp_div.style.visibility = "visible";
     season_h2.innerHTML =  `Season ${season}`;
     past_ul.innerHTML = "";
+    achievment_ul.innerHTML = "";
+    for(let i = 0; i < allAchievments.length; i++) {
+        if(i === 0) {
+            const li = document.createElement('li');
+            li.textContent = allAchievments[i];
+            li.style.fontWeight = "bold";
+            achievment_ul.appendChild(li);
+        } else if(i === 1) {
+            if(season > 4) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 2) {
+            if(team.trophies > 0) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 3) {
+            if(season > 9) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                 achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 4) {
+            if(season > 19) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        }  else if(i === 5) {
+            if(team.trophies > 4) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 6) {
+            if(season > 49) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 7) {
+            if(team.trophies > 10) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 8) {
+            if(overall85) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 9) {
+            if(overall88) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 10) {
+            if(team.trophies > 19) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 11) {
+            if(season > 99) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        }
+    }
     let year = 1;
     for(let i = 0; i < champs.length; i++) {
         const li = document.createElement('li');
@@ -224,12 +372,18 @@ function calculatePlayerOverall(player) {
     }
 }
 
-function calculateOverall(team) {
+function calculateOverall(curTeam) {
     let totalOverall = 0;
-    for (let i = 0; i < team.players.length; i++) {
-        totalOverall += team.players[i].overall;
+    for (let i = 0; i < curTeam.players.length; i++) {
+        totalOverall += curTeam.players[i].overall;
     }
-    team.teamOverall = Math.round(totalOverall / team.players.length)
+    curTeam.teamOverall = Math.round(totalOverall / curTeam.players.length)
+    if(team.teamName == curTeam.teamName && curTeam.teamOverall >= 85) {
+        overall85 = true;
+    } 
+    if(team.teamName == curTeam.teamName && curTeam.teamOverall >= 88) {
+        overall85 = true;
+    } 
 }
 
 // calculate the points
