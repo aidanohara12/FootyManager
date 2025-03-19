@@ -1,14 +1,14 @@
 ![Footy Manager](footymanagerlogo3.png)
 
-Welcome to Footy Manager!
+## Welcome to Footy Manager!
 
 Footy Manager is an endless simulation where you get to play as your favorite football(soccer) teams and battle to win the league! At the end of the season, as the manager you are tasked with keeping your old team or choose upgrades with new players!
 
-To play for your own head over to footy-manager.com!
+To play for your own head over to [Footy Manager](https://footy-manager.com)!
 
 This project was made with HTML, CSS, and Javascript. Using a overall shell of the HTML I was able to use the Javascript and CSS to edit to show what the user could see. I created my own simulation algorithm to create a random weighted by seeding simulation which can be found in my Javascript. This project helped me better my skills in Javascript letting me learn how to use DOM to edit my HTML elements. 
 
-How to Play
+## How to Play
 
 First you are tasked with choosing what team you want to control and input your coach name.
 
