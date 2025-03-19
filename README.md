@@ -1,4 +1,4 @@
-![Footy Manager](footymanagerlogo3.jpg)
+![Footy Manager](footymanagerlogo3.png)
 
 Welcome to Footy Manager!
 
