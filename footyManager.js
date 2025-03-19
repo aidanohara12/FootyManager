@@ -24,7 +24,7 @@ const allAchievments = [
     "4.Play 10 Seasons",
     "5. Play 20 Seasons",
     "6. Win 5 Trophies!",
-    "7. Play 50 Seasoons!",
+    "7. Play 50 Seasons!",
     "8. Win 10 Trophies",
     "9. Create an 85 Overall Team",
     "10. Create an 88 Overall Team",
