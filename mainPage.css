@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4; /* Light gray background */
+    background-color: #f4f4f4;
     margin: 30;
     padding: 0;
     min-width: 1400px;
@@ -8,9 +8,9 @@ body {
 
 #header {
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: flex-start; /* Aligns to the top */
-    padding-top: 20px; /* Adjust spacing from the top */
+    justify-content: center;
+    align-items: flex-start; 
+    padding-top: 20px; 
 }
 
 #header img {
@@ -29,16 +29,16 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     display: inline-block;
     text-align: left;
-    width: 100%; /* Use full width */
-    max-width: 790px; /* Increase the max-width */
+    width: 100%;
+    max-width: 790px; 
 }
 
 #teams label {
-    display: block; /* Each label on a new line */
+    display: block; 
     font-size: 25px;
     margin-bottom: 5px;
     cursor: pointer;
-    /* white-space: nowrap; Prevents text from wrapping */
+    white-space: nowrap;
 }
 
 #teams input[type="radio"] {
