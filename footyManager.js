@@ -264,7 +264,7 @@ async function swapPlayers() {
                 achievment_ul.appendChild(li);
             }
         } else if(i === 7) {
-            if(team.trophies > 10) {
+            if(team.trophies > 9) {
                 const li = document.createElement('li');
                 li.textContent = allAchievments[i];
                 li.style.fontWeight = "bold";
