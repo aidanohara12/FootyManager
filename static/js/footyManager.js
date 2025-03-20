@@ -1,5 +1,8 @@
 window.addEventListener("load", setup);
 
+let streak = 0;
+let threeSeasons = false;
+let fiveSeasons = false;
 let season = 1;
 let champs = [];
 let team;
@@ -16,6 +19,10 @@ const positionOrder = {
 };
 let overall85 = false;
 let overall88 = false;
+let careerWins = 0;
+let careerLosses = 0;
+let careerDraws = 0;
+let careerTrophies = 0;
 
 const allAchievments = [
     "1. Play your first season!",
@@ -25,11 +32,13 @@ const allAchievments = [
     "5. Play 20 Seasons",
     "6. Win 5 Trophies!",
     "7. Play 50 Seasons!",
-    "8. Win 10 Trophies",
+    "8. Win 10 Trophies!",
     "9. Create an 85 Overall Team",
     "10. Create an 88 Overall Team",
     "11. Win 20 Trophies!",
-    "12. Play 100 Seasons"
+    "12. Play 100 Seasons",
+    "13. Win 3 Trophies in a row",
+    "14. win 5 Trophies in a row"
 ];
 
 async function setup() {
@@ -42,7 +51,7 @@ async function setup() {
    
 }
 
-
+//create all the DOM for the JS
 function createDOM() {
     select_button_reference = document.getElementById("submitButton");
     coach_name_input = document.getElementById("coachName");
@@ -63,9 +72,12 @@ function createDOM() {
     past_ul = document.getElementById("past");
     results_div = document.getElementById("results_tab");
     achievment_ul = document.getElementById("achievments");
+    careerStats_ul = document.getElementById("careerStats");
+
 
 }
 
+//create all event listeners 
 async function createEventListners() {
     select_button_reference.addEventListener("click", await teamSetup);
     simulate.addEventListener("click", simulateWeek);
@@ -73,7 +85,7 @@ async function createEventListners() {
 
 }
 
-
+//class player which has all player types
 class Player {
     constructor(position, name, pace, shooting, dribbling, passing, defense, physicality) {
         this.position = position;
@@ -100,6 +112,7 @@ class Player {
     }
 }
 
+//class team which has all team types
 class Team {
     constructor(players, coachName, teamName, wins, draws, losses) {
         this.players = players;
@@ -125,10 +138,10 @@ class Team {
     }
 }
 
+//go through the other teams and swap their players for the highest overall
 async function otherTeamSwap() {
     for (let team of otherTeams) {
         let newPlayers = [];
-        newPlayers.push(await makeRandomPlayer());
         newPlayers.push(await makeRandomPlayer());
         newPlayers.push(await makeRandomPlayer());
 
@@ -174,6 +187,7 @@ async function otherTeamSwap() {
     }
 }
 
+//function that runs the otherTeams Swap
 async function swapPlayers() {
     let swapPlayers = getSelectedPlayers();
     if (swapPlayers.length === 0) {
@@ -191,6 +205,8 @@ async function swapPlayers() {
     season_h2.innerHTML =  `Season ${season}`;
     past_ul.innerHTML = "";
     achievment_ul.innerHTML = "";
+    careerStats_ul.innerHTML = "";
+    showCareerStats();
     for(let i = 0; i < allAchievments.length; i++) {
         if(i === 0) {
             const li = document.createElement('li');
@@ -318,18 +334,54 @@ async function swapPlayers() {
                 li.textContent = allAchievments[i];
                 achievment_ul.appendChild(li);
             }
+        } else if(i === 12) {
+            if(threeSeasons) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 13) {
+            if(fiveSeasons) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
         }
     }
     let year = 1;
     for(let i = 0; i < champs.length; i++) {
         const li = document.createElement('li');
-        li.textContent = `Season ${year} Champion: ${champs[i]}`;
+        li.textContent = `Season ${year}: ${champs[i]}`;
         past_ul.appendChild(li);
         year++;
     }
     simulateWeek();
 }
 
+function showCareerStats() {
+    const li = document.createElement('li');
+    li.textContent = `Manager Name: ${team.coachName}`;
+    careerStats_ul.appendChild(li);
+
+    const li2 = document.createElement('li');
+    li2.textContent = `Career Record: ${careerWins}-${careerDraws}-${careerLosses}`;
+    careerStats_ul.appendChild(li2);
+    const li3 = document.createElement('li');
+    li3.textContent = `Career Trophies: ${careerTrophies}`;
+    careerStats_ul.appendChild(li3);
+}
+
+//gets all of the selected players and adds them to the team
 function getSelectedPlayers() {
     const selectedPlayers = [];
     const checkboxes = document.querySelectorAll('input[name="player_choice"]:checked');
@@ -368,6 +420,7 @@ function getSelectedPlayers() {
     return selectedPlayers;
 }
 
+//calculate the player overall based on the metricks
 function calculatePlayerOverall(player) {
     if (player.position == "FW") {
         player.overall = Math.round((player.pace + player.pace + player.shooting + player.shooting + player.dribbling + player.dribbling + player.passing + player.physicality) / 8);
@@ -380,6 +433,7 @@ function calculatePlayerOverall(player) {
     }
 }
 
+//calculate the overall of the team
 function calculateOverall(curTeam) {
     let totalOverall = 0;
     for (let i = 0; i < curTeam.players.length; i++) {
@@ -415,6 +469,7 @@ async function resetSeason() {
     }
 }
 
+//reset the players on all teams
 async function resetPlayers(curTeam) {
     let newPlayers = [];
 
@@ -422,7 +477,6 @@ async function resetPlayers(curTeam) {
         curTeam.players[i].seasonsRemaining--;
 
         if (curTeam.players[i].seasonsRemaining === 0) {
-            console.log(`Removing ${curTeam.players[i].name} from ${curTeam.teamName}`);
 
             let newName = await getRandomName();
             let newPlayer;
@@ -444,19 +498,18 @@ async function resetPlayers(curTeam) {
 
 
     curTeam.players.push(...newPlayers);
-    console.log(`New players added to ${curTeam.teamName}: ${newPlayers.length}`);
 
     while (curTeam.players.length < 6) {
         let newName = await getRandomName();
         let randomPosition = ["GK", "DEF", "MID", "FW"][Math.floor(Math.random() * 4)];
         let newPlayer = new Player(randomPosition, newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
         curTeam.players.push(newPlayer);
-        console.log(`Auto-filled ${curTeam.teamName} with ${newPlayer.name} (${newPlayer.position})`);
     }
 
     calculateOverall(curTeam);
 }
 
+//get the champion of the last season 
 function getChampion() {
     allTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
@@ -470,7 +523,6 @@ function getChampion() {
 
     return allTeams[0].teamName;
 }
-
 
 //simulate the week using the simulate game
 async function simulateWeek() {
@@ -512,6 +564,7 @@ async function simulateWeek() {
     week++;
 }
 
+//display the final table of the seaosn
 function displayFinalTable() {
     allTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
@@ -539,11 +592,23 @@ function displayFinalTable() {
 
         if (i == 1) {
             curTeam.trophies++;
+            if(curTeam.teamName == team.teamName) {
+                streak++;
+                careerTrophies++;
+                if(streak === 3) {
+                    threeSeasons = true;
+                } else if(streak === 5) {
+                    fiveSeasons = true;
+                }
+            } else {
+                streak = 0;
+            }
         }
         i++;
     })
 }
 
+//display the current table
 function displayTable() {
     allTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
@@ -622,34 +687,78 @@ function createSchedule(teams) {
 
 //simulate the game
 function simulateGame(team1, team2) {
+    let isTeam1 = false;
+    let isTeam2 = false;
+    if(team1.teamName == team.teamName) {
+        isTeam1 = true;
+    } else if(team2.teamName == team.teamName) {
+        isTeam2 = true;
+    }
+
     if (team1.teamOverall > team2.teamOverall) {
         let team1Average = 0;
         let team2Average = 0;
-        for (let i = 0; i < 3; i++) {
-            team1Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
-            team2Average += Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+        let overallDifference = team1.teamOverall - team2.teamOverall;
+        let team1Score = 0;
+        let team2Score = 0;
+        if(overallDifference > 4) {
+            for (let i = 0; i < 3; i++) {
+                team1Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+                team2Average += Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+            }
+            if ((Math.floor(Math.random() * (6 - 0 + 1)) + 0) == 0) {
+                team1Average = 0;
+            }
+            if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+                team2Average = 0;
+            }
+            team1Score = Math.round(team1Average / 3);
+            team2Score = Math.round(team2Average / 3);
+        } else {
+            for (let i = 0; i < 3; i++) {
+                team1Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+                team2Average += Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+            }
+            if ((Math.floor(Math.random() * (5 - 0 + 1)) + 0) == 0) {
+                team1Average = 0;
+            }
+            if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+                team2Average = 0;
+            }
+            team1Score = Math.round(team1Average / 3);
+            team2Score = Math.round(team2Average / 3);
         }
-        if ((Math.floor(Math.random() * (5 - 0 + 1)) + 0) == 0) {
-            team1Average = 0;
-        }
-        if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
-            team2Average = 0;
-        }
-        let team1Score = Math.round(team1Average / 3);
-        let team2Score = Math.round(team2Average / 3);
 
         let differential = Math.abs(team1Score - team2Score);
 
 
         if (team1Score == team2Score) {
+            if(isTeam1) {
+                careerDraws++;
+            }
+            if(isTeam2) {
+                careerDraws++;
+            }
             team1.draws++;
             team2.draws++;
         } else if (team1Score > team2Score) {
+            if(isTeam1) {
+                careerWins++;
+            }
+            if(isTeam2) {
+                careerLosses++;
+            }
             team1.wins++;
             team1.goalDifferential += differential;
             team2.goalDifferential -= differential;
             team2.losses++;
         } else if (team1Score < team2Score) {
+            if(isTeam1) {
+                careerLosses++;
+            }
+            if(isTeam2) {
+                careerWins++;
+            }
             team1.losses++;
             team1.goalDifferential -= differential;
             team2.goalDifferential += differential;
@@ -661,30 +770,66 @@ function simulateGame(team1, team2) {
     } else if (team1.teamOverall < team2.teamOverall) {
         let team1Average = 0;
         let team2Average = 0;
-        for (let i = 0; i < 3; i++) {
-            team1Average += Math.floor(Math.random() * (3 - 0 + 1)) + 0;
-            team2Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+        let overallDifference = team2.teamOverall - team1.teamOverall;
+        let team1Score = 0;
+        let team2Score = 0;
+        if(overallDifference > 4) {
+            for (let i = 0; i < 3; i++) {
+                team1Average += Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+                team2Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+            }
+            if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+                team1Average = 0;
+            }
+            if ((Math.floor(Math.random() * (6 - 0 + 1)) + 0) == 0) {
+                team2Average = 0;
+            }
+            team1Score = Math.round(team1Average / 3);
+            team2Score = Math.round(team2Average / 3);
+        } else {
+            for (let i = 0; i < 3; i++) {
+                team1Average += Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+                team2Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+            }
+            if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+                team1Average = 0;
+            }
+            if ((Math.floor(Math.random() * (5 - 0 + 1)) + 0) == 0) {
+                team2Average = 0;
+            }
+            team1Score = Math.round(team1Average / 3);
+            team2Score = Math.round(team2Average / 3);
         }
-        if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
-            team1Average = 0;
-        }
-        if ((Math.floor(Math.random() * (5 - 0 + 1)) + 0) == 0) {
-            team2Average = 0;
-        }
-        let team1Score = Math.round(team1Average / 3);
-        let team2Score = Math.round(team2Average / 3);
 
         let differential = Math.abs(team1Score - team2Score);
 
         if (team1Score == team2Score) {
+            if(isTeam1) {
+                careerDraws++;
+            }
+            if(isTeam2) {
+                careerDraws++;
+            }
             team1.draws++;
             team2.draws++;
         } else if (team1Score > team2Score) {
+            if(isTeam1) {
+                careerWins++;
+            }
+            if(isTeam2) {
+                careerLosses++;
+            }
             team1.wins++;
             team1.goalDifferential += differential;
             team2.goalDifferential -= differential;
             team2.losses++;
         } else if (team1Score < team2Score) {
+            if(isTeam1) {
+                careerLosses++;
+            }
+            if(isTeam2) {
+                careerWins++;
+            }
             team1.losses++;
             team1.goalDifferential -= differential;
             team2.goalDifferential += differential;
@@ -698,10 +843,10 @@ function simulateGame(team1, team2) {
             team1Average += Math.floor(Math.random() * (3 - 0 + 1)) + 0;
             team2Average += Math.floor(Math.random() * (3 - 0 + 1)) + 0;
         }
-        if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+        if ((Math.floor(Math.random() * (4 - 0 + 1)) + 0) == 0) {
             team1Average = 0;
         }
-        if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+        if ((Math.floor(Math.random() * (4 - 0 + 1)) + 0) == 0) {
             team2Average = 0;
         }
         let team1Score = Math.round(team1Average / 3);
@@ -710,14 +855,32 @@ function simulateGame(team1, team2) {
         let differential = Math.abs(team1Score - team2Score);
 
         if (team1Score == team2Score) {
+            if(isTeam1) {
+                careerDraws++;
+            }
+            if(isTeam2) {
+                careerDraws++;
+            }
             team1.draws++;
             team2.draws++;
         } else if (team1Score > team2Score) {
+            if(isTeam1) {
+                careerWins++;
+            }
+            if(isTeam2) {
+                careerLosses++;
+            }
             team1.wins++;
             team1.goalDifferential += differential;
             team2.goalDifferential -= differential;
             team2.losses++;
         } else if (team1Score < team2Score) {
+            if(isTeam1) {
+                careerLosses++;
+            }
+            if(isTeam2) {
+                careerWins++;
+            }
             team1.losses++;
             team1.goalDifferential -= differential;
             team2.goalDifferential += differential;
@@ -809,13 +972,8 @@ async function displayPlayers() {
     team.players.forEach(player => {
         newPlayers.push(player);
     })
-    newPlayers.push(await makeRandomPlayer());
-    newPlayers.push(await makeRandomPlayer());
-    newPlayers.push(await makeRandomPlayer());
-    newPlayers.push(await makeRandomPlayer());
-    newPlayers.push(await makeRandomPlayer());
 
-    while (newPlayers.length < 12) {
+    while (newPlayers.length < 10) {
         newPlayers.push(await makeRandomPlayer());
     }
 

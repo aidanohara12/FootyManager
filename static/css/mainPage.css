@@ -148,11 +148,22 @@ button:hover {
 #past {
     list-style: none;
     margin-left: -40px;
+    text-align: left;
 }
 
 #achievments {
     list-style: none;
     margin-left: -40px;
     text-align: left;
+}
+
+#careerStats {
+    list-style: none;
+    margin-left: -40px;
+    text-align: left;
+}
+
+#careerStats li{
+    margin-bottom: 5px;
 }
 

@@ -1,55 +1,57 @@
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBCEDW872K"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-NBCEDW872K');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-NBCEDW872K');
     </script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3959928614724634"
         crossorigin="anonymous"></script>
 
     <meta name="google-site-verification" content="JdOpOXgQ4Iv2azEcZoDY19YarLAr2wG_wbCMSBOf0fc" />
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./mainPage.css">
+    <link rel="stylesheet" href="./static/css/mainPage.css">
     <title>FootyManager</title>
 </head>
+
 <body>
     <div id="header">
-       <img src="footymanagerlogo3.png" id="logo">
+        <img src="footymanagerlogo3.png" id="logo">
     </div>
 
     <br>
 
     <div id="teams">
         <h4>Choose a Team Below</h4>
-        
+
         <input type="radio" name="team_choice" value="Liverpool" checked>Liverpool</input>
-        <input type="radio" name="team_choice" value="Manchester United" >Manchester United</input>
-        <input type="radio" name="team_choice" value="Barcelona" >Barcelona</input>
-        <input type="radio" name="team_choice" value="Real Madrid" >Real Madrid</input>
-        <input type="radio" name="team_choice" value="Arsenal" >Arsenal</input>   
-        <input type="radio" name="team_choice" value="Bayern" >Bayern</input>
-        <input type="radio" name="team_choice" value="PSG" >PSG</input> 
-        <input type="radio" name="team_choice" value="Inter Milan" >Inter Milan</input> 
-        <input type="radio" name="team_choice" value="Tottenham" >Tottenham</input> 
-        <input type="radio" name="team_choice" value="Inter Miami" >Inter Miami</input> 
-        <input type="radio" name="team_choice" value="AC Milan" >AC Milan</input> 
-        <input type="radio" name="team_choice" value="Manchester City" >Manchester City</input> 
-        <input type="radio" name="team_choice" value="Aston Villa" >Aston Villa</input> 
-        <input type="radio" name="team_choice" value="Athletico Madrid" >Athletico Madrid</input> 
-        <input type="radio" name="team_choice" value="Chelsea" >Chelsea</input> 
-        <input type="radio" name="team_choice" value="Dortmund" >Dortmund</input> 
-        <input type="radio" name="team_choice" value="Juventus" >Juventus</input> 
-        <input type="radio" name="team_choice" value="Roma" >Roma</input> 
-        <input type="radio" name="team_choice" value="Napoli" >Napoli</input> 
-        <input type="radio" name="team_choice" value="Porto" >Porto</input> 
+        <input type="radio" name="team_choice" value="Manchester United">Manchester United</input>
+        <input type="radio" name="team_choice" value="Barcelona">Barcelona</input>
+        <input type="radio" name="team_choice" value="Real Madrid">Real Madrid</input>
+        <input type="radio" name="team_choice" value="Arsenal">Arsenal</input>
+        <input type="radio" name="team_choice" value="Bayern">Bayern</input>
+        <input type="radio" name="team_choice" value="PSG">PSG</input>
+        <input type="radio" name="team_choice" value="Inter Milan">Inter Milan</input>
+        <input type="radio" name="team_choice" value="Tottenham">Tottenham</input>
+        <input type="radio" name="team_choice" value="Inter Miami">Inter Miami</input>
+        <input type="radio" name="team_choice" value="AC Milan">AC Milan</input>
+        <input type="radio" name="team_choice" value="Manchester City">Manchester City</input>
+        <input type="radio" name="team_choice" value="Aston Villa">Aston Villa</input>
+        <input type="radio" name="team_choice" value="Athletico Madrid">Athletico Madrid</input>
+        <input type="radio" name="team_choice" value="Chelsea">Chelsea</input>
+        <input type="radio" name="team_choice" value="Dortmund">Dortmund</input>
+        <input type="radio" name="team_choice" value="Juventus">Juventus</input>
+        <input type="radio" name="team_choice" value="Roma">Roma</input>
+        <input type="radio" name="team_choice" value="Napoli">Napoli</input>
+        <input type="radio" name="team_choice" value="Porto">Porto</input>
     </div>
 
     <div id="name">
@@ -58,18 +60,18 @@
 
         <h6>Click the button below to see your team and start simulating!</h6>
     </div>
-        <button id="submitButton">See Team!</button>
+    <button id="submitButton">See Team!</button>
 
     <div>
         <div id="curTeams">
             <h2>Current Teams</h2>
 
             <ul id="usrTeam"></ul>
-    
+
             <ul id="currentTeam"></ul>
         </div>
-    
-    
+
+
         <div id="results_tab">
             <h2>Results</h2>
 
@@ -77,35 +79,41 @@
             <ul id="allGames"></ul>
             <button id="simulate">Simulate</button>
             <ul id="results"></ul>
-            
+
 
             <div id="greatSeason">
                 <h4>Congrats on a Great Season!</h4>
                 <h6>Below resign or sign new players to your team!</h6>
-                    <h6>Please Choose 1 GK | 2 DEF | 2 MID | 1 FW</h6>
+                <h6>Please Choose 1 GK | 2 DEF | 2 MID | 1 FW</h6>
                 <div id="players-container">
                 </div>
                 <button id="choosePlayers">Continue to Next Season!</button>
             </div>
-            
+
 
         </div>
 
 
 
-        <div id ="pastChampions">
-            <h2 id="season"></h3>
-            <div>
-                <h4>🥇Achievments🥇</h4>
-                <ul id="achievments"></ul>
-            </div>
+        <div id="pastChampions">
+            <h2 id="season">
+                </h3>
+                <div>
+                    <h4>⚽️Career Stats⚽️</h4>
+                    <ul id="careerStats"></ul>
+                </div>
+                <div>
+                    <h4>🥇Achievments🥇</h4>
+                    <ul id="achievments"></ul>
+                </div>
 
-            <h4 id="">🏆Past Champions🏆</h4>
-            <ul id="past"></ul>
+                <h4 id="">🏆Past Champions🏆</h4>
+                <ul id="past"></ul>
         </div>
     </div>
-    
 
-    <script src="footyManager.js"></script>
+
+    <script src="./static/js/footyManager.js"></script>
 </body>
+
 </html>
