@@ -73,6 +73,7 @@ function createDOM() {
     results_div = document.getElementById("results_tab");
     achievment_ul = document.getElementById("achievments");
     careerStats_ul = document.getElementById("careerStats");
+    table = document.getElementById("table");
 }
 
 //create all event listeners 
@@ -551,6 +552,7 @@ async function simulateWeek() {
     allGames_ul.innerHTML = "";
     results_ul.innerHTML = "";
     weekGamesh4.innerHTML = "";
+    table.innerHTML = "";
     if(week+1 > 0) {
         weekGamesh4.innerHTML = `Week ${week+1} results`
     }
@@ -567,9 +569,12 @@ function displayFinalTable() {
     allTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
     })
-    const li = document.createElement('li');
-    li.textContent = `Current Table:`;
-    results_ul.appendChild(li);
+    table.deleteRow(0);
+    let row = table.insertRow(0);
+    let finalTable = row.insertCell(0);
+    finalTable.innerHTML = `<strong>Final Table</strong>`;
+    finalTable.style.fontSize = "30px";
+ 
     let i = 1;
     allTeams.sort((a, b) => {
         if (b.points !== a.points) {
@@ -577,17 +582,6 @@ function displayFinalTable() {
         }
         return b.goalDifferential - a.goalDifferential;
     }).forEach(curTeam => {
-        if (curTeam.teamName == team.teamName) {
-            const li = document.createElement('li');
-            li.textContent = `${i}. ${curTeam.teamName}: ${getPoints(curTeam.wins, curTeam.draws)} points, Goal Differential ${curTeam.goalDifferential} `;
-            li.style.fontWeight = "bold";
-            results_ul.appendChild(li);
-        } else {
-            const li = document.createElement('li');
-            li.textContent = `${i}. ${curTeam.teamName}: ${getPoints(curTeam.wins, curTeam.draws)} points, Goal Differential ${curTeam.goalDifferential} `;
-            results_ul.appendChild(li);
-        }
-
         if (i == 1) {
             curTeam.trophies++;
             if(curTeam.teamName == team.teamName) {
@@ -611,10 +605,27 @@ function displayTable() {
     allTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
     })
-    const li = document.createElement('li');
-    li.textContent = `Current Table:`;
-    li.style.fontWeight = "bold";
-    results_ul.appendChild(li);
+    let row1 = table.insertRow(-1);
+    let titleCell = row1.insertCell(0);
+
+    
+    titleCell.innerHTML = `<strong>Current Table</strong>`;
+
+    titleCell.style.fontSize = "24px";
+
+
+    let row = table.insertRow(-1);
+    let clubCell = row.insertCell(0);
+    let pointsCell = row.insertCell(1);
+    let differentialCell = row.insertCell(2);
+    
+    clubCell.innerHTML = `<strong>Club</strong>`;
+    pointsCell.innerHTML = `<strong>Points</strong>`;
+    differentialCell.innerHTML = `<strong>Goal Differential</strong>`;
+    
+    clubCell.style.fontSize = "18px";
+    pointsCell.style.fontSize = "18px";
+    differentialCell.style.fontSize = "18px";
     let i = 1;
     allTeams.sort((a, b) => {
         if (b.points !== a.points) {
@@ -623,14 +634,15 @@ function displayTable() {
         return b.goalDifferential - a.goalDifferential;
     }).forEach(curTeam => {
         if (curTeam.teamName == team.teamName) {
-            const li = document.createElement('li');
-            li.textContent = `${i}. ${curTeam.teamName}: ${getPoints(curTeam.wins, curTeam.draws)} points, Goal Differential ${curTeam.goalDifferential} `;
-            li.style.fontWeight = "bold";
-            results_ul.appendChild(li);
+            let row = table.insertRow(-1);
+            row.insertCell(0).innerHTML = `<strong>${i}. ${curTeam.teamName}</strong>`;
+            row.insertCell(1).innerHTML = `<strong>${curTeam.points}</strong>`;
+            row.insertCell(2).innerHTML = `<strong>${curTeam.goalDifferential}</strong>`;
         } else {
-            const li = document.createElement('li');
-            li.textContent = `${i}. ${curTeam.teamName}: ${getPoints(curTeam.wins, curTeam.draws)} points, Goal Differential ${curTeam.goalDifferential} `;
-            results_ul.appendChild(li);
+            let row = table.insertRow(-1);
+            row.insertCell(0).textContent = `${i}. ${curTeam.teamName}`;
+            row.insertCell(1).textContent = curTeam.points;
+            row.insertCell(2).textContent = curTeam.goalDifferential;
         }
         i++;
     })
