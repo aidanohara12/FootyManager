@@ -37,8 +37,8 @@ const allAchievments = [
     "10. Create an 88 Overall Team",
     "11. Win 20 Trophies!",
     "12. Play 100 Seasons",
-    "13. Win 3 Trophies in a row",
-    "14. win 5 Trophies in a row"
+    "13. Win 3 Trophies in a Row",
+    "14. Win 5 Trophies in a Row"
 ];
 
 async function setup() {
@@ -73,8 +73,6 @@ function createDOM() {
     results_div = document.getElementById("results_tab");
     achievment_ul = document.getElementById("achievments");
     careerStats_ul = document.getElementById("careerStats");
-
-
 }
 
 //create all event listeners 
