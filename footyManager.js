@@ -883,7 +883,7 @@ async function teamSetup() {
 // create all of the other rival teams
 async function otherTeamsSetup() {
     const selectedTeam = document.querySelector('input[name="team_choice"]:checked');
-    let all_teams = ["Liverpool", "Manchester United", "Barcalona", "Real Madrid", "Arsenal", "Bayern", "PSG", "Inter Milan", "Tottenham", "Inter Miami", "AC Milan", "Manchester City", "Aston Villa", "Athletico Madrid", "Chelsea", "Dortmund", "Juventus", "Roma", "Napoli", "Porto"];
+    let all_teams = ["Liverpool", "Manchester United", "Barcelona", "Real Madrid", "Arsenal", "Bayern", "PSG", "Inter Milan", "Tottenham", "Inter Miami", "AC Milan", "Manchester City", "Aston Villa", "Athletico Madrid", "Chelsea", "Dortmund", "Juventus", "Roma", "Napoli", "Porto"];
 
     for (const curTeam of all_teams) {
         if (selectedTeam && curTeam !== selectedTeam.value) {
