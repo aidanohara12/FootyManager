@@ -100,7 +100,7 @@ class Player {
         } else if (this.position == "DEF") {
             this.overall = Math.round((pace + dribbling + defense + defense + defense + physicality + physicality) / 7);
         } else if (this.position == "MID") {
-            this.overall = Math.round((pace + pace + shooting + dribbling + dribbling + passing + passing + passing + defense + physicality + physicality) / 11);
+            this.overall = Math.round((pace + pace + shooting + dribbling + dribbling + passing + passing + passing + defense + physicality) / 10);
         } else {
             this.overall = Math.round((pace + shooting + dribbling + defense + physicality) / 5);
         }
@@ -485,9 +485,9 @@ async function resetPlayers(curTeam) {
             } else if (curTeam.players[i].position == "DEF") {
                 newPlayer = new Player("DEF", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
             } else if (curTeam.players[i].position == "MID") {
-                newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
+                newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberBET());
             } else if (curTeam.players[i].position == "FW") {
-                newPlayer = new Player("FW", newName, getRandomNumber(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+                newPlayer = new Player("FW", newName, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
             }
 
             curTeam.players.splice(i, 1);
@@ -1020,7 +1020,7 @@ async function teamSetup() {
         let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
         let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
         let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-        let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+        let newPlayer6 = new Player("FW", randomName6, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
         let players = [];
         players.push(newPlayer);
         players.push(newPlayer2);
@@ -1067,7 +1067,7 @@ async function otherTeamsSetup() {
             let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
             let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
             let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-            let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+            let newPlayer6 = new Player("FW", randomName6, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
 
             let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
 
