@@ -4,6 +4,7 @@ body {
     margin: 30;
     padding: 0;
     min-width: 1400px;
+    max-width: 1530px;
 }
 
 #header {
