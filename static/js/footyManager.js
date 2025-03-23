@@ -192,7 +192,6 @@ async function swapPlayers() {
     if (swapPlayers.length === 0) {
         return; 
     }
-    console.log(swapPlayers);
 
     team.players = swapPlayers;
     await otherTeamSwap();
@@ -529,7 +528,6 @@ async function simulateWeek() {
     document.getElementById("simulate").style.visibility = "visible";
     if (week >= fullSchedule.length) {
         allGames_ul.innerHTML = "";
-        console.log("Season is over!");
         results_ul.innerHTML = "";
         const li = document.createElement('li');
         li.textContent = `Season Over!`;
@@ -986,10 +984,6 @@ async function displayPlayers() {
     while (newPlayers.length < 10) {
         newPlayers.push(await makeRandomPlayer());
     }
-
-
-
-    console.log(newPlayers);
 
     newPlayers.sort((a, b) => {
         return positionOrder[a.position] - positionOrder[b.position];
