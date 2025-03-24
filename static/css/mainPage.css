@@ -23,25 +23,30 @@ body {
     list-style: none;
 }
 
-#teams {
+#leagueChoice {
+    display: block;
+    margin-bottom: 10px; 
+}
+
+#teamsContainer {
     background: white;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    display: inline-block;
+    display: block;
     text-align: left;
-    width: 100%; 
-    max-width: 790px; 
+    width: 100%;
+    max-width: 150px;
 }
 
-#teams label {
+.team-option {
     display: block;
     font-size: 25px;
     margin-bottom: 5px;
     cursor: pointer;
 }
 
-#teams input[type="radio"] {
+.team-option input[type="radio"] {
     margin-right: 8px;
     transform: scale(1.2);
 }

@@ -32,26 +32,18 @@
     <div id="teams">
         <h4>Choose a Team Below</h4>
 
-        <input type="radio" name="team_choice" value="Liverpool" checked>Liverpool</input>
-        <input type="radio" name="team_choice" value="Manchester United">Manchester United</input>
-        <input type="radio" name="team_choice" value="Barcelona">Barcelona</input>
-        <input type="radio" name="team_choice" value="Real Madrid">Real Madrid</input>
-        <input type="radio" name="team_choice" value="Arsenal">Arsenal</input>
-        <input type="radio" name="team_choice" value="Bayern">Bayern</input>
-        <input type="radio" name="team_choice" value="PSG">PSG</input>
-        <input type="radio" name="team_choice" value="Inter Milan">Inter Milan</input>
-        <input type="radio" name="team_choice" value="Tottenham">Tottenham</input>
-        <input type="radio" name="team_choice" value="Inter Miami">Inter Miami</input>
-        <input type="radio" name="team_choice" value="AC Milan">AC Milan</input>
-        <input type="radio" name="team_choice" value="Manchester City">Manchester City</input>
-        <input type="radio" name="team_choice" value="Aston Villa">Aston Villa</input>
-        <input type="radio" name="team_choice" value="Athletico Madrid">Athletico Madrid</input>
-        <input type="radio" name="team_choice" value="Chelsea">Chelsea</input>
-        <input type="radio" name="team_choice" value="Dortmund">Dortmund</input>
-        <input type="radio" name="team_choice" value="Juventus">Juventus</input>
-        <input type="radio" name="team_choice" value="Roma">Roma</input>
-        <input type="radio" name="team_choice" value="Napoli">Napoli</input>
-        <input type="radio" name="team_choice" value="Porto">Porto</input>
+        <div>
+            <select id="leagueChoice">
+                <option value="">Choose a League</option>
+                <option value="Champions League">Top League</option>
+                <option value="Europa League">Middle League</option>
+                <option value="Conference League">Bottom League</option>
+            </select>
+            
+            <div id="teamsContainer"></div>
+        </div>
+        
+
     </div>
 
     <div id="name">
@@ -116,7 +108,7 @@
                     <ul id="achievments"></ul>
                 </div>
 
-                <h4 id="">🏆Past Champions🏆</h4>
+                <h4 id="">🏆Past Top League Champions🏆</h4>
                 <ul id="past"></ul>
         </div>
     </div>

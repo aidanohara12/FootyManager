@@ -8,8 +8,14 @@ let champs = [];
 let team;
 let otherTeams = [];
 let allTeams = [];
+let championsLeagueTeams = [];
+let europaLeagueTeams = [];
+let conferenceLeagueTeams = [];
 let week = 0;
-let fullSchedule = [];
+let champsSchedule = [];
+let europaSchedule = [];
+let conferenceSchedule = [];
+let currentLeague = "Champions League";
 let seasonOver = true;
 const positionOrder = {
     'GK': 1,
@@ -23,6 +29,12 @@ let careerWins = 0;
 let careerLosses = 0;
 let careerDraws = 0;
 let careerTrophies = 0;
+
+const leagueTeams = {
+    "Champions League": ["Liverpool", "Manchester United", "Barcelona", "Real Madrid", "Arsenal", "Bayern", "PSG", "Inter Milan", "Tottenham", "Inter Miami", "AC Milan", "Manchester City", "Aston Villa", "Athletico Madrid", "Chelsea", "Dortmund", "Juventus", "Roma", "Napoli", "Porto"],
+    "Europa League": ["Lazio", "Athletic Club", "Frankfurt", "Lyon", "Olympiacos", "Rangers", "Celtic", "Ajax", "Real Sociedad", "Galatasaray", "Hoffenheim", "Nice", "Brest", "Leverkusen", "Atalanta", "PSV", "Benfica", "Monaco", "Sporting", "Young Boys"],
+    "Conference League": ["Fiorentina", "Rapid Vienna", "Real Betis", "Newcastle", "Brighton", "West Ham", "Girona", "Al Nassr", "Villarreal", "Sevilla", "Marseille", "LOSC", "Lens", "Bologna", "Columbus Crew", "Riverhounds", "LAFC", "Santos", "Al Hilal", "Nottingham Forest"]
+};
 
 const allAchievments = [
     "1. Play your first season!",
@@ -74,6 +86,9 @@ function createDOM() {
     achievment_ul = document.getElementById("achievments");
     careerStats_ul = document.getElementById("careerStats");
     table = document.getElementById("table");
+    leagueChoice = document.getElementById("leagueChoice");
+    teamsContainer = document.getElementById("teamsContainer");
+
 }
 
 //create all event listeners 
@@ -81,6 +96,31 @@ async function createEventListners() {
     select_button_reference.addEventListener("click", await teamSetup);
     simulate.addEventListener("click", simulateWeek);
     choosePlayers.addEventListener("click", await swapPlayers);
+    leagueChoice.addEventListener("change", function () {
+        const selectedLeague = this.value;
+        teamsContainer.innerHTML = "";
+
+        if (selectedLeague && leagueTeams[selectedLeague]) {
+            leagueTeams[selectedLeague].forEach(team => {
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "team_choice";
+                radio.value = team;
+
+                const label = document.createElement("label");
+                label.style.fontSize = "15px"
+                label.textContent = team;
+
+                teamsContainer.appendChild(radio);
+                teamsContainer.appendChild(label);
+                teamsContainer.appendChild(document.createElement("br")); // Line break for better spacing
+            });
+
+            if (teamsContainer.firstChild) {
+                teamsContainer.firstChild.checked = true;
+            }
+        }
+    });
 
 }
 
@@ -113,7 +153,7 @@ class Player {
 
 //class team which has all team types
 class Team {
-    constructor(players, coachName, teamName, wins, draws, losses) {
+    constructor(players, coachName, teamName, wins, draws, losses, league) {
         this.players = players;
         this.coachName = coachName;
         this.teamName = teamName;
@@ -128,6 +168,8 @@ class Team {
         this.points = (wins * 3) + draws;
         this.goalDifferential = 0;
         this.trophies = 0;
+        this.league = league;
+        this.top3 = false;
     }
     displayTeamOverall() {
         return `Team Overall: ${this.teamOverall}`
@@ -141,8 +183,18 @@ class Team {
 async function otherTeamSwap() {
     for (let team of otherTeams) {
         let newPlayers = [];
-        newPlayers.push(await makeRandomPlayer());
-        newPlayers.push(await makeRandomPlayer());
+
+        if(team.league === "Conference League") {
+            newPlayers.push(await makeWorseRandomPlayer());
+            newPlayers.push(await makeWorseRandomPlayer());
+        } else if(team.league === "Europa League") {
+            newPlayers.push(await makeWorseRandomPlayer());
+            newPlayers.push(await makeRandomPlayer());
+        } else {
+            newPlayers.push(await makeRandomPlayer());
+            newPlayers.push(await makeRandomPlayer());
+        }
+        
 
         let sortedNewPlayers = newPlayers.sort((a, b) => {
             return positionOrder[a.position] - positionOrder[b.position];
@@ -455,7 +507,11 @@ function getPoints(wins, draws) {
 async function resetSeason() {
     week = 0;
     season++;
-    createSchedule(allTeams);
+    swapTeams();
+    champsSchedule = createSchedule(championsLeagueTeams);
+    europaSchedule = createSchedule(europaLeagueTeams);
+    conferenceSchedule = createSchedule(conferenceLeagueTeams);
+    currentLeague = team.league;
     champs.push(getChampion());
     for (let curTeam of allTeams) {
         curTeam.wins = 0;
@@ -463,8 +519,35 @@ async function resetSeason() {
         curTeam.losses = 0;
         curTeam.points = 0;
         curTeam.goalDifferential = 0;
+        curTeam.top3 = false;
         await resetPlayers(curTeam);
     }
+}
+
+//do the accurate promotion and relagation
+function swapTeams() {
+    championsLeagueTeams.forEach(cur => cur.points = getPoints(cur.wins, cur.draws));
+    championsLeagueTeams.sort((a, b) => (b.points - a.points) || (b.goalDifferential - a.goalDifferential));
+
+    europaLeagueTeams.forEach(cur => cur.points = getPoints(cur.wins, cur.draws));
+    europaLeagueTeams.sort((a, b) => (b.points - a.points) || (b.goalDifferential - a.goalDifferential));
+
+    conferenceLeagueTeams.forEach(cur => cur.points = getPoints(cur.wins, cur.draws));
+    conferenceLeagueTeams.sort((a, b) => (b.points - a.points) || (b.goalDifferential - a.goalDifferential));
+
+    let bottom3ChampionsLeague = championsLeagueTeams.splice(-3);
+    let top3EuropaLeague = europaLeagueTeams.splice(0, 3);
+    let bottom3EuropaLeague = europaLeagueTeams.splice(-3);
+    let top3ConferenceLeague = conferenceLeagueTeams.splice(0, 3);
+
+    bottom3ChampionsLeague.forEach(team => team.league = "Europa League");
+    top3EuropaLeague.forEach(team => team.league = "Champions League");
+    bottom3EuropaLeague.forEach(team => team.league = "Conference League");
+    top3ConferenceLeague.forEach(team => team.league = "Europa League");
+
+    championsLeagueTeams.push(...top3EuropaLeague);
+    europaLeagueTeams.push(...bottom3ChampionsLeague, ...top3ConferenceLeague);
+    conferenceLeagueTeams.push(...bottom3EuropaLeague);
 }
 
 //reset the players on all teams
@@ -509,24 +592,24 @@ async function resetPlayers(curTeam) {
 
 //get the champion of the last season 
 function getChampion() {
-    allTeams.forEach(cur => {
+    championsLeagueTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
     })
-    allTeams.sort((a, b) => {
+    championsLeagueTeams.sort((a, b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
         return b.goalDifferential - a.goalDifferential;
     });
 
-    return allTeams[0].teamName;
+    return championsLeagueTeams[0].teamName;
 }
 
 //simulate the week using the simulate game
 async function simulateWeek() {
     document.getElementById("greatSeason").style.visibility = "hidden";
     document.getElementById("simulate").style.visibility = "visible";
-    if (week >= fullSchedule.length) {
+    if (week >= champsSchedule.length) {
         allGames_ul.innerHTML = "";
         results_ul.innerHTML = "";
         const li = document.createElement('li');
@@ -554,7 +637,13 @@ async function simulateWeek() {
     if(week+1 > 0) {
         weekGamesh4.innerHTML = `Week ${week+1} results`
     }
-    fullSchedule[week].forEach(match => {
+    champsSchedule[week].forEach(match => {
+        simulateGame(match[0], match[1]);
+    });
+    europaSchedule[week].forEach(match => {
+        simulateGame(match[0], match[1]);
+    });
+    conferenceSchedule[week].forEach(match => {
         simulateGame(match[0], match[1]);
     });
     displayTeamStats();
@@ -564,17 +653,30 @@ async function simulateWeek() {
 
 //display the final table of the seaosn
 function displayFinalTable() {
-    allTeams.forEach(cur => {
+    let leagueTeams = getLeagueTeams();
+    leagueTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
     })
     table.deleteRow(0);
+    let row2 = table.insertRow(-1);
+    let titleCell1 = row2.insertCell(0);
+    if(currentLeague === "Champions League") {
+        titleCell1.innerHTML = `<strong>Top League</strong>`;
+    } else if(currentLeague === "Europa League") {
+        titleCell1.innerHTML = `<strong>Middle League</strong>`;
+    } else if(currentLeague === "Conference League") {
+        titleCell1.innerHTML = `<strong>Bottom League</strong>`;
+    } 
+    
+    titleCell1.style.fontSize = "30px";
+
     let row = table.insertRow(0);
     let finalTable = row.insertCell(0);
     finalTable.innerHTML = `<strong>Final Table</strong>`;
-    finalTable.style.fontSize = "30px";
+    finalTable.style.fontSize = "24px";
  
     let i = 1;
-    allTeams.sort((a, b) => {
+    leagueTeams.sort((a, b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
@@ -594,22 +696,37 @@ function displayFinalTable() {
                 streak = 0;
             }
         }
+        if(i < 4) {
+            curTeam.top3 = true;
+        }
         i++;
     })
 }
 
 //display the current table
 function displayTable() {
-    allTeams.forEach(cur => {
+    let leagueTeams = getLeagueTeams();
+    leagueTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
     })
+    let row2 = table.insertRow(-1);
+    let titleCell1 = row2.insertCell(0);
+    if(currentLeague === "Champions League") {
+        titleCell1.innerHTML = `<strong>Top League</strong>`;
+    } else if(currentLeague === "Europa League") {
+        titleCell1.innerHTML = `<strong>Middle League</strong>`;
+    } else if(currentLeague === "Conference League") {
+        titleCell1.innerHTML = `<strong>Bottom League</strong>`;
+    } 
+    titleCell1.style.fontSize = "24px";
+
     let row1 = table.insertRow(-1);
     let titleCell = row1.insertCell(0);
 
     
     titleCell.innerHTML = `<strong>Current Table</strong>`;
 
-    titleCell.style.fontSize = "24px";
+    titleCell.style.fontSize = "17px";
 
 
     let row = table.insertRow(-1);
@@ -625,40 +742,79 @@ function displayTable() {
     pointsCell.style.fontSize = "18px";
     differentialCell.style.fontSize = "18px";
     let i = 1;
-    allTeams.sort((a, b) => {
+    leagueTeams.sort((a, b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
         return b.goalDifferential - a.goalDifferential;
     }).forEach(curTeam => {
-        if (curTeam.teamName == team.teamName) {
-            let row = table.insertRow(-1);
-            row.insertCell(0).innerHTML = `<strong>${i}. ${curTeam.teamName}</strong>`;
-            row.insertCell(1).innerHTML = `<strong>${curTeam.points}</strong>`;
-            row.insertCell(2).innerHTML = `<strong>${curTeam.goalDifferential}</strong>`;
+        if(i < 4) {
+            if (curTeam.teamName == team.teamName) {
+                let row = table.insertRow(-1);
+                row.insertCell(0).innerHTML = `<strong>${i}. ${curTeam.teamName}</strong>`;
+                row.cells[0].style.color = "green"; 
+                row.insertCell(1).innerHTML = `<strong>${curTeam.points}</strong>`;
+                row.cells[1].style.color = "green"; 
+                row.insertCell(2).innerHTML = `<strong>${curTeam.goalDifferential}</strong>`;
+                row.cells[2].style.color = "green";   
+            } else {
+                let row = table.insertRow(-1);
+                row.insertCell(0).textContent = `${i}. ${curTeam.teamName}`;
+                row.cells[0].style.color = "green"; 
+                row.insertCell(1).textContent = curTeam.points;
+                row.cells[1].style.color = "green"; 
+                row.insertCell(2).textContent = curTeam.goalDifferential;
+                row.cells[2].style.color = "green"; 
+            }
+        } else if (i > 17) {
+            if (curTeam.teamName == team.teamName) {
+                let row = table.insertRow(-1);
+                row.insertCell(0).innerHTML = `<strong>${i}. ${curTeam.teamName}</strong>`;
+                row.cells[0].style.color = "red"; 
+                row.insertCell(1).innerHTML = `<strong>${curTeam.points}</strong>`;
+                row.cells[1].style.color = "red"; 
+                row.insertCell(2).innerHTML = `<strong>${curTeam.goalDifferential}</strong>`;
+                row.cells[2].style.color = "red";   
+            } else {
+                let row = table.insertRow(-1);
+                row.insertCell(0).textContent = `${i}. ${curTeam.teamName}`;
+                row.cells[0].style.color = "red"; 
+                row.insertCell(1).textContent = curTeam.points;
+                row.cells[1].style.color = "red"; 
+                row.insertCell(2).textContent = curTeam.goalDifferential;
+                row.cells[2].style.color = "red"; 
+            }
         } else {
-            let row = table.insertRow(-1);
-            row.insertCell(0).textContent = `${i}. ${curTeam.teamName}`;
-            row.insertCell(1).textContent = curTeam.points;
-            row.insertCell(2).textContent = curTeam.goalDifferential;
+            if (curTeam.teamName == team.teamName) {
+                let row = table.insertRow(-1);
+                row.insertCell(0).innerHTML = `<strong>${i}. ${curTeam.teamName}</strong>`;
+                row.insertCell(1).innerHTML = `<strong>${curTeam.points}</strong>`;
+                row.insertCell(2).innerHTML = `<strong>${curTeam.goalDifferential}</strong>`;
+            } else {
+                let row = table.insertRow(-1);
+                row.insertCell(0).textContent = `${i}. ${curTeam.teamName}`;
+                row.insertCell(1).textContent = curTeam.points;
+                row.insertCell(2).textContent = curTeam.goalDifferential;
+            }
         }
         i++;
     })
 }
 
 //display the current week results
-function displayResults(team1, team1Score, team2, team2Score) {
-    if (team1 == team.teamName || team2 == team.teamName) {
-        const li = document.createElement('li');
-        li.textContent = `${team1}: ${team1Score} -- ${team2}: ${team2Score}`;
-        li.style.fontWeight = "bold";
-        allGames_ul.appendChild(li);
-    } else {
-        const li = document.createElement('li');
-        li.textContent = `${team1}: ${team1Score} -- ${team2}: ${team2Score}`;
-        allGames_ul.appendChild(li);
+function displayResults(team1, team1Score, team2, team2Score, league) {
+    if(league === currentLeague) {
+        if (team1 == team.teamName || team2 == team.teamName) {
+            const li = document.createElement('li');
+            li.textContent = `${team1}: ${team1Score} -- ${team2}: ${team2Score}`;
+            li.style.fontWeight = "bold";
+            allGames_ul.appendChild(li);
+        } else {
+            const li = document.createElement('li');
+            li.textContent = `${team1}: ${team1Score} -- ${team2}: ${team2Score}`;
+            allGames_ul.appendChild(li);
+        }
     }
-
 }
 
 //create the schedule
@@ -773,7 +929,7 @@ function simulateGame(team1, team2) {
             team2.wins++;
         }
 
-        displayResults(team1.teamName, team1Score, team2.teamName, team2Score);
+        displayResults(team1.teamName, team1Score, team2.teamName, team2Score, team1.league);
 
     } else if (team1.teamOverall < team2.teamOverall) {
         let team1Average = 0;
@@ -843,7 +999,7 @@ function simulateGame(team1, team2) {
             team2.goalDifferential += differential;
             team2.wins++;
         }
-        displayResults(team1.teamName, team1Score, team2.teamName, team2Score);
+        displayResults(team1.teamName, team1Score, team2.teamName, team2Score, team1.league);
     } else if (team2.teamOverall == team1.teamOverall) {
         let team1Average = 0;
         let team2Average = 0;
@@ -894,16 +1050,17 @@ function simulateGame(team1, team2) {
             team2.goalDifferential += differential;
             team2.wins++;
         }
-        displayResults(team1.teamName, team1Score, team2.teamName, team2Score);
+        displayResults(team1.teamName, team1Score, team2.teamName, team2Score, team1.league);
     }
 }
 
 //display all of the team stats
 function displayTeamStats() {
-    allTeams.forEach(cur => {
+    let leagueTeams = getLeagueTeams();
+    leagueTeams.forEach(cur => {
         cur.points = getPoints(cur.wins, cur.draws);
     })
-    allTeams.sort((a, b) => {
+    leagueTeams.sort((a, b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
@@ -981,10 +1138,29 @@ async function displayPlayers() {
         newPlayers.push(player);
     })
 
-    while (newPlayers.length < 10) {
-        newPlayers.push(await makeRandomPlayer());
+    if(team.top3) {
+        while (newPlayers.length < 13) {
+            if(currentLeague === "Conference League") {
+                newPlayers.push(await makeWorseRandomPlayer());
+            } else if (currentLeague === "Europa League"){
+                newPlayers.push(await makeWorseRandomPlayer());
+                newPlayers.push(await makeRandomPlayer());
+            } else {
+                newPlayers.push(await makeRandomPlayer());
+            }
+        }
+    } else {
+        while (newPlayers.length < 10) {
+            if(currentLeague === "Conference League") {
+                newPlayers.push(await makeWorseRandomPlayer());
+            } else if (currentLeague === "Europa League"){
+                newPlayers.push(await makeWorseRandomPlayer());
+                newPlayers.push(await makeRandomPlayer());
+            } else {
+                newPlayers.push(await makeRandomPlayer());
+            }
+        }
     }
-
     newPlayers.sort((a, b) => {
         return positionOrder[a.position] - positionOrder[b.position];
     }).forEach((player) => {
@@ -997,45 +1173,106 @@ async function displayPlayers() {
     });
 }
 
+function getLeagueTeams() {
+    if(currentLeague === "Champions League") {
+        return championsLeagueTeams;
+    } else if(currentLeague === "Europa League") {
+        return europaLeagueTeams;
+    } else if(currentLeague === "Conference League") {
+        return conferenceLeagueTeams;
+    }
+}
+
 // create current players team
 async function teamSetup() {
     const selectedTeam = document.querySelector('input[name="team_choice"]:checked');
+    currentLeague = leagueChoice.value;
     document.getElementById("teams").style.visibility = "hidden";
     results_div.style.visibility = "visible";
     if (selectedTeam) {
-        let randomName = await getRandomName();
-        let randomName2 = await getRandomName();
-        let randomName3 = await getRandomName();
-        let randomName4 = await getRandomName();
-        let randomName5 = await getRandomName();
-        let randomName6 = await getRandomName();
-        let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-        let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-        let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-        let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-        let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-        let newPlayer6 = new Player("FW", randomName6, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
-        let players = [];
-        players.push(newPlayer);
-        players.push(newPlayer2);
-        players.push(newPlayer3);
-        players.push(newPlayer4);
-        players.push(newPlayer5);
-        players.push(newPlayer6);
-        team = new Team(players, coach_name_input.value, selectedTeam.value, 0, 0, 0);
-        await otherTeamsSetup();
-        allTeams.push(team);
+        if(currentLeague === "Champions League") {
+            let randomName = await getRandomName();
+            let randomName2 = await getRandomName();
+            let randomName3 = await getRandomName();
+            let randomName4 = await getRandomName();
+            let randomName5 = await getRandomName();
+            let randomName6 = await getRandomName();
+            let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+            let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+            let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+            let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
+            let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
+            let newPlayer6 = new Player("FW", randomName6, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+            let players = [];
+            players.push(newPlayer);
+            players.push(newPlayer2);
+            players.push(newPlayer3);
+            players.push(newPlayer4);
+            players.push(newPlayer5);
+            players.push(newPlayer6);
+            team = new Team(players, coach_name_input.value, selectedTeam.value, 0, 0, 0, leagueChoice.value);
+            await otherTeamsSetup();
+            allTeams.push(team);
+            championsLeagueTeams.push(team);
+        } else if(currentLeague === "Europa League") {
+            let randomName = await getRandomName();
+            let randomName2 = await getRandomName();
+            let randomName3 = await getRandomName();
+            let randomName4 = await getRandomName();
+            let randomName5 = await getRandomName();
+            let randomName6 = await getRandomName();
+            let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+            let players = [];
+            players.push(newPlayer);
+            players.push(newPlayer2);
+            players.push(newPlayer3);
+            players.push(newPlayer4);
+            players.push(newPlayer5);
+            players.push(newPlayer6);
+            team = new Team(players, coach_name_input.value, selectedTeam.value, 0, 0, 0, leagueChoice.value);
+            await otherTeamsSetup();
+            allTeams.push(team);
+            europaLeagueTeams.push(team);
+        } else if(currentLeague === "Conference League") {
+            let randomName = await getRandomName();
+            let randomName2 = await getRandomName();
+            let randomName3 = await getRandomName();
+            let randomName4 = await getRandomName();
+            let randomName5 = await getRandomName();
+            let randomName6 = await getRandomName();
+            let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+            let newPlayer2 = new Player("DEF", randomName2, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer3 = new Player("DEF", randomName3, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer4 = new Player("MID", randomName4, getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer5 = new Player("MID", randomName5, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer6 = new Player("FW", randomName6, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber());
+            let players = [];
+            players.push(newPlayer);
+            players.push(newPlayer2);
+            players.push(newPlayer3);
+            players.push(newPlayer4);
+            players.push(newPlayer5);
+            players.push(newPlayer6);
+            team = new Team(players, coach_name_input.value, selectedTeam.value, 0, 0, 0, leagueChoice.value);
+            await otherTeamsSetup();
+            allTeams.push(team);
+            conferenceLeagueTeams.push(team);
+        }
         currentTeams_div.style.visibility = "visible";
         displayTeamStats()
-
-
-
 
         selector1.innerHTML = ``;
         selector2.innerHTML = ``;
         select_button_reference.remove();
 
-        fullSchedule = createSchedule(allTeams);
+        champsSchedule = createSchedule(championsLeagueTeams);
+        europaSchedule = createSchedule(europaLeagueTeams);
+        conferenceSchedule = createSchedule(conferenceLeagueTeams);
 
         return team;
     }
@@ -1045,30 +1282,90 @@ async function teamSetup() {
 // create all of the other rival teams
 async function otherTeamsSetup() {
     const selectedTeam = document.querySelector('input[name="team_choice"]:checked');
-    let all_teams = ["Liverpool", "Manchester United", "Barcelona", "Real Madrid", "Arsenal", "Bayern", "PSG", "Inter Milan", "Tottenham", "Inter Miami", "AC Milan", "Manchester City", "Aston Villa", "Athletico Madrid", "Chelsea", "Dortmund", "Juventus", "Roma", "Napoli", "Porto"];
+    const champLeague = ["Liverpool", "Manchester United", "Barcelona", "Real Madrid", "Arsenal", "Bayern", "PSG", "Inter Milan", "Tottenham", "Inter Miami", "AC Milan", "Manchester City", "Aston Villa", "Athletico Madrid", "Chelsea", "Dortmund", "Juventus", "Roma", "Napoli", "Porto"];
+    const champsMapped = Object.fromEntries(champLeague.map(team => [team, "Champions League"]));
+    const europaLeague = ["Lazio", "Athletic Club", "Frankfurt", "Lyon", "Olympiacos", "Ranger", "Celtic", "Ajax", "Real Sociedad", "Galatasaray", "Hoffenheim", "Nice", "Brest", "Leverkusen", "Atalanta", "PSV", "Benfica", "Monaco", "Sporting", "Young Boys"];
+    const europaMapped = Object.fromEntries(europaLeague.map(team => [team, "Europa League"]));
+    const conferenceLeague = ["Fiorentia", "Rapid Vienna", "Real Betis", "Newcastle", "Brighton", "West Ham", "Girona", "Al Nassr", "Villarreal", "Sevilla", "Marseille", "LOSC", "Lens", "Bologna", "Columbus Crew", "Riverhounds", "LAFC", "Santos", "Al Hilal", "Nottingham Forest"];
+    const conferenceMapped = Object.fromEntries(conferenceLeague.map(team => [team, "Conference League"]));
 
-    for (const curTeam of all_teams) {
-        if (selectedTeam && curTeam !== selectedTeam.value) {
-            let randomName = await getRandomName();
-            let randomName2 = await getRandomName();
-            let randomName3 = await getRandomName();
-            let randomName4 = await getRandomName();
-            let randomName5 = await getRandomName();
-            let randomName6 = await getRandomName();
+    const all_leagues = [champsMapped, europaMapped, conferenceMapped];
 
-            let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-            let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-            let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-            let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-            let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-            let newPlayer6 = new Player("FW", randomName6, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+    for (const curLeague of all_leagues) {
+        for (const curTeam in curLeague) {
+            if(curLeague[curTeam] == "Champions League") {
+                if(selectedTeam && curTeam !== selectedTeam.value) {
+                    let randomName = await getRandomName();
+                    let randomName2 = await getRandomName();
+                    let randomName3 = await getRandomName();
+                    let randomName4 = await getRandomName();
+                    let randomName5 = await getRandomName();
+                    let randomName6 = await getRandomName();
 
-            let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
+                    let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+                    let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
+                    let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
+                    let newPlayer6 = new Player("FW", randomName6, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+
+                    let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
 
 
-            let newTeam = new Team(players, await getRandomName(), curTeam, 0, 0, 0);
-            otherTeams.push(newTeam);
-            allTeams.push(newTeam);
+                    let newTeam = new Team(players, await getRandomName(), curTeam, 0, 0, 0, "Champions League");
+                    otherTeams.push(newTeam);
+                    allTeams.push(newTeam);
+                    championsLeagueTeams.push(newTeam);
+                }
+            } else if (curLeague[curTeam] == "Europa League") {
+                if(selectedTeam && curTeam !== selectedTeam.value) {
+                    let randomName = await getRandomName();
+                    let randomName2 = await getRandomName();
+                    let randomName3 = await getRandomName();
+                    let randomName4 = await getRandomName();
+                    let randomName5 = await getRandomName();
+                    let randomName6 = await getRandomName();
+
+                    let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+
+                    let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
+
+
+                    let newTeam = new Team(players, await getRandomName(), curTeam, 0, 0, 0, "Europa League");
+                    otherTeams.push(newTeam);
+                    allTeams.push(newTeam);
+                    europaLeagueTeams.push(newTeam);
+                }
+            } else if (curLeague[curTeam] == "Conference League") {
+                if(selectedTeam && curTeam !== selectedTeam.value) {
+                    let randomName = await getRandomName();
+                    let randomName2 = await getRandomName();
+                    let randomName3 = await getRandomName();
+                    let randomName4 = await getRandomName();
+                    let randomName5 = await getRandomName();
+                    let randomName6 = await getRandomName();
+
+                    let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
+                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer4 = new Player("MID", randomName4, getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
+                    let newPlayer5 = new Player("MID", randomName5, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+                    let newPlayer6 = new Player("FW", randomName6, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber());
+
+                    let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
+
+
+                    let newTeam = new Team(players, await getRandomName(), curTeam, 0, 0, 0, "Conference League");
+                    otherTeams.push(newTeam);
+                    allTeams.push(newTeam);
+                    conferenceLeagueTeams.push(newTeam);
+                }
+            }
         }
     }
 
@@ -1090,6 +1387,26 @@ async function makeRandomPlayer() {
         newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
     } else {
         newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+    }
+
+    return newPlayer;
+}
+
+async function makeWorseRandomPlayer() {
+    let positions = ["GK", "DEF", "MID", "FW"];
+    let randomPositon = positions[Math.floor(Math.random() * 4)];
+    let randomName = await getRandomName();
+    let newPlayer;
+    if (randomPositon == "GK") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+    } else if (randomPositon == "DEF") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
+    } else if (randomPositon == "MID") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
+    } else if (randomPositon == "FW") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR());
+    } else {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
     }
 
     return newPlayer;
