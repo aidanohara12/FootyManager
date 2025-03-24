@@ -1327,10 +1327,10 @@ async function otherTeamsSetup() {
                     let randomName6 = await getRandomName();
 
                     let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
                     let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer4 = new Player("MID", randomName4, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                    let newPlayer5 = new Player("MID", randomName5, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
                     let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
 
                     let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
@@ -1350,11 +1350,11 @@ async function otherTeamsSetup() {
                     let randomName5 = await getRandomName();
                     let randomName6 = await getRandomName();
 
-                    let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
-                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer4 = new Player("MID", randomName4, getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
-                    let newPlayer5 = new Player("MID", randomName5, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+                    let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
+                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
+                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
+                    let newPlayer4 = new Player("MID", randomName4, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber());
+                    let newPlayer5 = new Player("MID", randomName5, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
                     let newPlayer6 = new Player("FW", randomName6, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber());
 
                     let players = [newPlayer, newPlayer2, newPlayer3, newPlayer4, newPlayer5, newPlayer6];
