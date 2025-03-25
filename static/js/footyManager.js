@@ -33,7 +33,7 @@ let careerTrophies = 0;
 const leagueTeams = {
     "Champions League": ["Liverpool", "Manchester United", "Barcelona", "Real Madrid", "Arsenal", "Bayern", "PSG", "Inter Milan", "Tottenham", "Inter Miami", "AC Milan", "Manchester City", "Aston Villa", "Athletico Madrid", "Chelsea", "Dortmund", "Juventus", "Roma", "Napoli", "Porto"],
     "Europa League": ["Lazio", "Athletic Club", "Frankfurt", "Lyon", "Olympiacos", "Rangers", "Celtic", "Ajax", "Real Sociedad", "Galatasaray", "Hoffenheim", "Nice", "Brest", "Leverkusen", "Atalanta", "PSV", "Benfica", "Monaco", "Sporting", "Young Boys"],
-    "Conference League": ["Fiorentina", "Rapid Vienna", "Real Betis", "Newcastle", "Brighton", "West Ham", "Girona", "Al Nassr", "Villarreal", "Sevilla", "Marseille", "LOSC", "Lens", "Bologna", "Columbus Crew", "Riverhounds", "LAFC", "Santos", "Al Hilal", "Nottingham Forest"]
+    "Conference League": ["Wrexham", "Rapid Vienna", "Real Betis", "Newcastle", "Brighton", "West Ham", "Girona", "Al Nassr", "AFC Richmond", "Sevilla", "Marseille", "LOSC", "Lens", "Bologna", "Columbus Crew", "Riverhounds", "LAFC", "Santos", "Al Hilal", "Nottingham Forest"]
 };
 
 const allAchievments = [
@@ -562,14 +562,36 @@ async function resetPlayers(curTeam) {
             let newName = await getRandomName();
             let newPlayer;
 
-            if (curTeam.players[i].position == "GK") {
-                newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-            } else if (curTeam.players[i].position == "DEF") {
-                newPlayer = new Player("DEF", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-            } else if (curTeam.players[i].position == "MID") {
-                newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberBET());
-            } else if (curTeam.players[i].position == "FW") {
-                newPlayer = new Player("FW", newName, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+            if (currentLeague === "Champions League") {
+                if (positions[i] === "GK") {
+                    newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+                } else if (positions[i] === "DEF") {
+                    newPlayer = new Player("DEF", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
+                } else if (positions[i] === "MID") {
+                    newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
+                } else if (positions[i] === "FW") {
+                    newPlayer = new Player("FW", newName, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+                }
+            } else if (currentLeague === "Europa League") {
+                if (positions[i] === "GK") {
+                    newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                } else if (positions[i] === "DEF") {
+                    newPlayer = new Player("DEF", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                } else if (positions[i] === "MID") {
+                    newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                } else if (positions[i] === "FW") {
+                    newPlayer = new Player("FW", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+                }
+            } else if (currentLeague === "Conference League") {
+                if (positions[i] === "GK") {
+                    newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+                } else if (positions[i] === "DEF") {
+                    newPlayer = new Player("DEF", newName, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                } else if (positions[i] === "MID") {
+                    newPlayer = new Player("MID", newName, getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+                } else if (positions[i] === "FW") {
+                    newPlayer = new Player("FW", newName, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber());
+                }
             }
 
             curTeam.players.splice(i, 1);
@@ -1222,11 +1244,11 @@ async function teamSetup() {
             let randomName5 = await getRandomName();
             let randomName6 = await getRandomName();
             let newPlayer = new Player("GK", randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                    let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
+            let newPlayer2 = new Player("DEF", randomName2, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer3 = new Player("DEF", randomName3, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer4 = new Player("MID", randomName4, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer5 = new Player("MID", randomName5, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+            let newPlayer6 = new Player("FW", randomName6, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
             let players = [];
             players.push(newPlayer);
             players.push(newPlayer2);
@@ -1286,7 +1308,7 @@ async function otherTeamsSetup() {
     const champsMapped = Object.fromEntries(champLeague.map(team => [team, "Champions League"]));
     const europaLeague = ["Lazio", "Athletic Club", "Frankfurt", "Lyon", "Olympiacos", "Ranger", "Celtic", "Ajax", "Real Sociedad", "Galatasaray", "Hoffenheim", "Nice", "Brest", "Leverkusen", "Atalanta", "PSV", "Benfica", "Monaco", "Sporting", "Young Boys"];
     const europaMapped = Object.fromEntries(europaLeague.map(team => [team, "Europa League"]));
-    const conferenceLeague = ["Fiorentia", "Rapid Vienna", "Real Betis", "Newcastle", "Brighton", "West Ham", "Girona", "Al Nassr", "Villarreal", "Sevilla", "Marseille", "LOSC", "Lens", "Bologna", "Columbus Crew", "Riverhounds", "LAFC", "Santos", "Al Hilal", "Nottingham Forest"];
+    const conferenceLeague = ["Wrexham", "Rapid Vienna", "Real Betis", "Newcastle", "Brighton", "West Ham", "Girona", "Al Nassr", "AFC Richmond", "Sevilla", "Marseille", "LOSC", "Lens", "Bologna", "Columbus Crew", "Riverhounds", "LAFC", "Santos", "Al Hilal", "Nottingham Forest"];
     const conferenceMapped = Object.fromEntries(conferenceLeague.map(team => [team, "Conference League"]));
 
     const all_leagues = [champsMapped, europaMapped, conferenceMapped];
