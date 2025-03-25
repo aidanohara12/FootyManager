@@ -519,7 +519,6 @@ async function resetSeason() {
         curTeam.losses = 0;
         curTeam.points = 0;
         curTeam.goalDifferential = 0;
-        curTeam.top3 = false;
         await resetPlayers(curTeam);
     }
 }
@@ -563,33 +562,33 @@ async function resetPlayers(curTeam) {
             let newPlayer;
 
             if (currentLeague === "Champions League") {
-                if (positions[i] === "GK") {
+                if (curTeam.players[i].position === "GK") {
                     newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-                } else if (positions[i] === "DEF") {
+                } else if (curTeam.players[i].position === "DEF") {
                     newPlayer = new Player("DEF", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumberBET());
-                } else if (positions[i] === "MID") {
+                } else if (curTeam.players[i].position === "MID") {
                     newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberBET(), getRandomNumber(), getRandomNumber());
-                } else if (positions[i] === "FW") {
+                } else if (curTeam.players[i].position === "FW") {
                     newPlayer = new Player("FW", newName, getRandomNumberBET(), getRandomNumberBET(), getRandomNumberBET(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
                 }
             } else if (currentLeague === "Europa League") {
-                if (positions[i] === "GK") {
+                if (curTeam.players[i].position === "GK") {
                     newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                } else if (positions[i] === "DEF") {
+                } else if (curTeam.players[i].position === "DEF") {
                     newPlayer = new Player("DEF", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                } else if (positions[i] === "MID") {
+                } else if (curTeam.players[i].position === "MID") {
                     newPlayer = new Player("MID", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                } else if (positions[i] === "FW") {
+                } else if (curTeam.players[i].position === "FW") {
                     newPlayer = new Player("FW", newName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
                 }
             } else if (currentLeague === "Conference League") {
-                if (positions[i] === "GK") {
+                if (curTeam.players[i].position === "GK") {
                     newPlayer = new Player("GK", newName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber());
-                } else if (positions[i] === "DEF") {
+                } else if (curTeam.players[i].position === "DEF") {
                     newPlayer = new Player("DEF", newName, getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                } else if (positions[i] === "MID") {
+                } else if (curTeam.players[i].position === "MID") {
                     newPlayer = new Player("MID", newName, getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber());
-                } else if (positions[i] === "FW") {
+                } else if (curTeam.players[i].position === "FW") {
                     newPlayer = new Player("FW", newName, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumberWOR(), getRandomNumber());
                 }
             }
@@ -646,7 +645,9 @@ async function simulateWeek() {
         weekGamesh4.innerHTML = "";
         playerList.innerHTML = "";
         await displayPlayers();
-
+        for (let curTeam of allTeams) {
+            curTeam.top3 = false;
+        }
         return;
     }
     current_team_ul.style.visibility = "hidden";
