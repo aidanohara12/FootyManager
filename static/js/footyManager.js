@@ -1164,9 +1164,9 @@ async function displayPlayers() {
     if(team.top3) {
         while (newPlayers.length < 13) {
             if(currentLeague === "Conference League") {
-                newPlayers.push(await makeWorseRandomPlayer());
+                newPlayers.push(await makeMidRandomPlayer());
             } else if (currentLeague === "Europa League"){
-                newPlayers.push(await makeWorseRandomPlayer());
+                newPlayers.push(await makeMidRandomPlayer());
                 newPlayers.push(await makeRandomPlayer());
             } else {
                 newPlayers.push(await makeRandomPlayer());
@@ -1175,9 +1175,9 @@ async function displayPlayers() {
     } else {
         while (newPlayers.length < 10) {
             if(currentLeague === "Conference League") {
-                newPlayers.push(await makeWorseRandomPlayer());
+                newPlayers.push(await makeMidRandomPlayer());
             } else if (currentLeague === "Europa League"){
-                newPlayers.push(await makeWorseRandomPlayer());
+                newPlayers.push(await makeMidRandomPlayer());
                 newPlayers.push(await makeRandomPlayer());
             } else {
                 newPlayers.push(await makeRandomPlayer());
@@ -1428,6 +1428,26 @@ async function makeWorseRandomPlayer() {
         newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
     } else if (randomPositon == "FW") {
         newPlayer = new Player(randomPositon, randomName, getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumberWOR(), getRandomNumberWOR());
+    } else {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
+    }
+
+    return newPlayer;
+}
+
+async function makeMidRandomPlayer() {
+    let positions = ["GK", "DEF", "MID", "FW"];
+    let randomPositon = positions[Math.floor(Math.random() * 4)];
+    let randomName = await getRandomName();
+    let newPlayer;
+    if (randomPositon == "GK") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumber());
+    } else if (randomPositon == "DEF") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
+    } else if (randomPositon == "MID") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
+    } else if (randomPositon == "FW") {
+        newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
     } else {
         newPlayer = new Player(randomPositon, randomName, getRandomNumber(), getRandomNumber(), getRandomNumberWOR(), getRandomNumber(), getRandomNumber(), getRandomNumberWOR());
     }
