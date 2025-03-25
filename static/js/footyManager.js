@@ -507,12 +507,12 @@ function getPoints(wins, draws) {
 async function resetSeason() {
     week = 0;
     season++;
+    champs.push(getChampion());
     swapTeams();
     champsSchedule = createSchedule(championsLeagueTeams);
     europaSchedule = createSchedule(europaLeagueTeams);
     conferenceSchedule = createSchedule(conferenceLeagueTeams);
     currentLeague = team.league;
-    champs.push(getChampion());
     for (let curTeam of allTeams) {
         curTeam.wins = 0;
         curTeam.draws = 0;
