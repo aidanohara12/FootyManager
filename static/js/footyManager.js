@@ -170,12 +170,17 @@ class Team {
         this.trophies = 0;
         this.league = league;
         this.top3 = false;
+        this.last5 = [];
     }
     displayTeamOverall() {
         return `Team Overall: ${this.teamOverall}`
     }
     displayRecord() {
         return `Points: ${getPoints(this.wins, this.draws)}, Goal Differential: ${this.goalDifferential}`;
+    }
+
+    displayLast5() {
+        return this.last5.slice().reverse().map(String).join("");
     }
 }
 
@@ -669,6 +674,9 @@ async function simulateWeek() {
     conferenceSchedule[week].forEach(match => {
         simulateGame(match[0], match[1]);
     });
+
+    allGames_ul.appendChild(li1);
+
     displayTeamStats();
     displayTable();
     week++;
@@ -920,6 +928,14 @@ function simulateGame(team1, team2) {
 
 
         if (team1Score == team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.splice(0, 1); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.splice(0, 1);
+            }
+            team1.last5.unshift("D"); 
+            team2.last5.unshift("D");
             if(isTeam1) {
                 careerDraws++;
             }
@@ -929,6 +945,14 @@ function simulateGame(team1, team2) {
             team1.draws++;
             team2.draws++;
         } else if (team1Score > team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("W"); 
+            team2.last5.unshift("L");
             if(isTeam1) {
                 careerWins++;
             }
@@ -940,6 +964,14 @@ function simulateGame(team1, team2) {
             team2.goalDifferential -= differential;
             team2.losses++;
         } else if (team1Score < team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("L"); 
+            team2.last5.unshift("W");
             if(isTeam1) {
                 careerLosses++;
             }
@@ -991,6 +1023,14 @@ function simulateGame(team1, team2) {
         let differential = Math.abs(team1Score - team2Score);
 
         if (team1Score == team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("D"); 
+            team2.last5.unshift("D");
             if(isTeam1) {
                 careerDraws++;
             }
@@ -1000,6 +1040,14 @@ function simulateGame(team1, team2) {
             team1.draws++;
             team2.draws++;
         } else if (team1Score > team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("W"); 
+            team2.last5.unshift("L");
             if(isTeam1) {
                 careerWins++;
             }
@@ -1011,6 +1059,14 @@ function simulateGame(team1, team2) {
             team2.goalDifferential -= differential;
             team2.losses++;
         } else if (team1Score < team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("L"); 
+            team2.last5.unshift("W");
             if(isTeam1) {
                 careerLosses++;
             }
@@ -1042,6 +1098,14 @@ function simulateGame(team1, team2) {
         let differential = Math.abs(team1Score - team2Score);
 
         if (team1Score == team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("D"); 
+            team2.last5.unshift("D");
             if(isTeam1) {
                 careerDraws++;
             }
@@ -1051,6 +1115,14 @@ function simulateGame(team1, team2) {
             team1.draws++;
             team2.draws++;
         } else if (team1Score > team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("W"); 
+            team2.last5.unshift("L");
             if(isTeam1) {
                 careerWins++;
             }
@@ -1062,6 +1134,14 @@ function simulateGame(team1, team2) {
             team2.goalDifferential -= differential;
             team2.losses++;
         } else if (team1Score < team2Score) {
+            if (team1.last5.length >= 5) {
+                team1.last5.pop(); 
+            }
+            if (team2.last5.length >= 5) {
+                team2.last5.pop();
+            }
+            team1.last5.unshift("L"); 
+            team2.last5.unshift("W");
             if(isTeam1) {
                 careerLosses++;
             }
@@ -1108,6 +1188,10 @@ function displayTeamStats() {
             li6.textContent = `Record: ${curTeam.wins}-${curTeam.draws}-${curTeam.losses}`;
             usr_team_ul.appendChild(li6);
 
+            const li7 = document.createElement('li');
+            li7.textContent = `Form: ${curTeam.last5}`;
+            usr_team_ul.appendChild(li7);
+
             const li4 = document.createElement('li');
             li4.textContent = curTeam.displayTeamOverall();
             usr_team_ul.appendChild(li4)
@@ -1145,6 +1229,10 @@ function displayTeamStats() {
             const li4 = document.createElement('li');
             li4.textContent = curTeam.displayTeamOverall();
             current_team_ul.appendChild(li4)
+
+            const li7 = document.createElement('li');
+            li7.textContent = `Form: ${curTeam.last5}`;
+            current_team_ul.appendChild(li7);
 
             const li5 = document.createElement('li');
             li5.textContent = '--------------------------------------';
