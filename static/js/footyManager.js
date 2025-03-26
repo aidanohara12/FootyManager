@@ -675,8 +675,6 @@ async function simulateWeek() {
         simulateGame(match[0], match[1]);
     });
 
-    allGames_ul.appendChild(li1);
-
     displayTeamStats();
     displayTable();
     week++;
