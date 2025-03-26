@@ -1281,7 +1281,7 @@ async function displayPlayers() {
     })
 
     if(team.top3) {
-        while (newPlayers.length < 13) {
+        while (newPlayers.length < 12) {
             if(currentLeague === "Conference League") {
                 newPlayers.push(await makeMidRandomPlayer());
             } else if (currentLeague === "Europa League"){
