@@ -524,6 +524,7 @@ async function resetSeason() {
         curTeam.losses = 0;
         curTeam.points = 0;
         curTeam.goalDifferential = 0;
+        curTeam.last5 = [];
         await resetPlayers(curTeam);
     }
 }
