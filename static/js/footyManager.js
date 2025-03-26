@@ -53,8 +53,8 @@ const allAchievments = [
     "12. Play 100 Seasons",
     "13. Win 3 Trophies in a Row",
     "14. Win 5 Trophies in a Row",
-    "15. Get 100 Points in a season",
-    "16. Achive an invincible season"
+    "15. Get 100 Points in a Season",
+    "16. Achive an Invincible Season"
 ];
 
 async function setup() {
