@@ -548,7 +548,7 @@ async function resetSeason() {
         invincible = true;
     }
     if(getPoints(team.wins, team.draws) >= 100) {
-        invincible = true;
+        total100 = true;
     }
     for (let curTeam of allTeams) {
         curTeam.wins = 0;
