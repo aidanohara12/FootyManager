@@ -25,6 +25,8 @@ const positionOrder = {
 };
 let overall85 = false;
 let overall88 = false;
+let invincible = false;
+let total100 = false;
 let careerWins = 0;
 let careerLosses = 0;
 let careerDraws = 0;
@@ -50,7 +52,9 @@ const allAchievments = [
     "11. Win 20 Trophies!",
     "12. Play 100 Seasons",
     "13. Win 3 Trophies in a Row",
-    "14. Win 5 Trophies in a Row"
+    "14. Win 5 Trophies in a Row",
+    "15. Get 100 Points in a season",
+    "16. Achive an invincible season"
 ];
 
 async function setup() {
@@ -411,6 +415,28 @@ async function swapPlayers() {
                 li.textContent = allAchievments[i];
                 achievment_ul.appendChild(li);
             }
+        } else if(i === 14) {
+            if(total100) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
+        } else if(i === 15) {
+            if(invincible) {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                li.style.fontWeight = "bold";
+                achievment_ul.appendChild(li);
+            } else {
+                const li = document.createElement('li');
+                li.textContent = allAchievments[i];
+                achievment_ul.appendChild(li);
+            }
         }
     }
     let year = 1;
@@ -518,6 +544,12 @@ async function resetSeason() {
     europaSchedule = createSchedule(europaLeagueTeams);
     conferenceSchedule = createSchedule(conferenceLeagueTeams);
     currentLeague = team.league;
+    if(team.losses == 0) {
+        invincible = true;
+    }
+    if(getPoints(team.wins, team.draws) >= 100) {
+        invincible = true;
+    }
     for (let curTeam of allTeams) {
         curTeam.wins = 0;
         curTeam.draws = 0;
