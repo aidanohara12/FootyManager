@@ -932,10 +932,10 @@ function simulateGame(team1, team2) {
                 team1Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
                 team2Average += Math.floor(Math.random() * (2 - 0 + 1)) + 0;
             }
-            if ((Math.floor(Math.random() * (6 - 0 + 1)) + 0) == 0) {
+            if ((Math.floor(Math.random() * (10 - 0 + 1)) + 0) == 0) {
                 team1Average = 0;
             }
-            if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+            if ((Math.floor(Math.random() * (2 - 0 + 1)) + 0) == 0) {
                 team2Average = 0;
             }
             team1Score = Math.round(team1Average / 3);
@@ -1028,10 +1028,10 @@ function simulateGame(team1, team2) {
                 team1Average += Math.floor(Math.random() * (2 - 0 + 1)) + 0;
                 team2Average += Math.floor(Math.random() * (5 - 0 + 1)) + 0;
             }
-            if ((Math.floor(Math.random() * (3 - 0 + 1)) + 0) == 0) {
+            if ((Math.floor(Math.random() * (2 - 0 + 1)) + 0) == 0) {
                 team1Average = 0;
             }
-            if ((Math.floor(Math.random() * (6 - 0 + 1)) + 0) == 0) {
+            if ((Math.floor(Math.random() * (10 - 0 + 1)) + 0) == 0) {
                 team2Average = 0;
             }
             team1Score = Math.round(team1Average / 3);
