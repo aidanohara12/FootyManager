@@ -1274,6 +1274,7 @@ function displayTeamStats() {
 
 }
 
+//display all players to pick from
 async function displayPlayers() {
     let newPlayers = [];
     team.players.forEach(player => {
@@ -1315,6 +1316,7 @@ async function displayPlayers() {
     });
 }
 
+//get the teams in the current league
 function getLeagueTeams() {
     if(currentLeague === "Champions League") {
         return championsLeagueTeams;
@@ -1534,6 +1536,7 @@ async function makeRandomPlayer() {
     return newPlayer;
 }
 
+//make a worse player for lower leagues
 async function makeWorseRandomPlayer() {
     let positions = ["GK", "DEF", "MID", "FW"];
     let randomPositon = positions[Math.floor(Math.random() * 4)];
@@ -1554,6 +1557,7 @@ async function makeWorseRandomPlayer() {
     return newPlayer;
 }
 
+//make a mid player for additions
 async function makeMidRandomPlayer() {
     let positions = ["GK", "DEF", "MID", "FW"];
     let randomPositon = positions[Math.floor(Math.random() * 4)];
